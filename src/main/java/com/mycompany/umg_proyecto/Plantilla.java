@@ -13,8 +13,8 @@ import java.util.Date;
  */
 public class Plantilla {
       
-    String codePlantilla;
-    Date periodo;
+    private String codePlantilla;
+    private Date periodo;
     
     ArrayList<Empleado> empleados = new ArrayList<Empleado>();
     

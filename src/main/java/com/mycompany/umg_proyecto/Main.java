@@ -4,8 +4,15 @@
  */
 package com.mycompany.umg_proyecto;
 
+import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +25,7 @@ public class Main extends javax.swing.JFrame {
      */
     
     public static ArrayList<Empresa> empresas = new ArrayList<Empresa>();
+    
     public Main() {
         empresas.add(new Empresa("123", "La Torre.s.a"));
         empresas.add(new Empresa("456", "Walmart.s.a"));
@@ -67,18 +75,20 @@ public class Main extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel1)
                         .addGap(59, 59, 59)
                         .addComponent(textCode, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(58, 58, 58)
-                        .addComponent(jButton1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(labelEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(139, Short.MAX_VALUE))
+                        .addGap(58, 58, 58))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(labelEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)))
+                .addGap(5, 5, 5)
+                .addComponent(jButton1)
+                .addContainerGap(156, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -90,7 +100,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jButton1))
                 .addGap(26, 26, 26)
                 .addComponent(labelEmpresa)
-                .addContainerGap(182, Short.MAX_VALUE))
+                .addContainerGap(427, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -98,16 +108,16 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
@@ -125,13 +135,29 @@ public class Main extends javax.swing.JFrame {
         
         for (int i = 0; i < empresas.size(); i++) {
             Empresa e = empresas.get(i);
-            if (e.codigo.equals(code)) {
-                nombreEmpresa = e.nombre;
+            if (e.getCodigo().equals(code)) {
+                nombreEmpresa = e.getNombre();
             }
         }
         
         if (!nombreEmpresa.isEmpty()) {
             labelEmpresa.setText(nombreEmpresa);
+            
+            JButton bt_fileChooser = new JButton("Choos a file");
+            
+            bt_fileChooser.setBounds(280,80,100,30);
+            
+            bt_fileChooser.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    jButtonFileChooserActionPerformed(e);
+                }
+            });
+            
+            jPanel1.add(bt_fileChooser);
+            jPanel1.repaint();
+            jPanel1.revalidate();
+            
         }else{
             
             inscribirEmpresa();
@@ -141,6 +167,25 @@ public class Main extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+        private void jButtonFileChooserActionPerformed(java.awt.event.ActionEvent evt) {
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showOpenDialog(this);
+        
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    // You can process each line as needed, for example:
+                    System.out.println(line);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error reading file: " + e.getMessage());
+            }
+        }
+    }
+
+        
     /**
      * @param args the command line arguments
      */
